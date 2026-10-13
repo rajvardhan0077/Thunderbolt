@@ -16,12 +16,13 @@ from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.metrics import (
     accuracy_score,
     classification_report,
+    confusion_matrix,
+    f1_score,
     mean_absolute_error,
     mean_squared_error,
     precision_score,
     r2_score,
     recall_score,
-    root_mean_squared_error,
 )
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
@@ -121,7 +122,7 @@ def build_preprocessor(feature_columns: list[str] | None = None) -> ColumnTransf
 def build_classification_model(name: str) -> Pipeline:
     preprocessor = build_preprocessor(FEATURE_COLUMNS)
     if name == "logistic_regression":
-        estimator = LogisticRegression(max_iter=2500, multi_class="auto")
+        estimator = LogisticRegression(max_iter=2500, random_state=42)
     elif name == "decision_tree":
         estimator = DecisionTreeClassifier(random_state=42)
     elif name == "random_forest":
@@ -156,7 +157,8 @@ def evaluate_classification_model(model_name: str, X_train: pd.DataFrame, X_test
     accuracy = accuracy_score(y_test, y_pred)
     precision = precision_score(y_test, y_pred, average="weighted", zero_division=0)
     recall = recall_score(y_test, y_pred, average="weighted", zero_division=0)
-    f1 = (2 * precision * recall / (precision + recall)) if (precision + recall) else 0.0
+    f1 = f1_score(y_test, y_pred, average="weighted", zero_division=0)
+    cm = confusion_matrix(y_test, y_pred).tolist()
 
     report = classification_report(y_test, y_pred, output_dict=True, zero_division=0)
     return {
@@ -165,6 +167,7 @@ def evaluate_classification_model(model_name: str, X_train: pd.DataFrame, X_test
         "precision_weighted": round(float(precision), 4),
         "recall_weighted": round(float(recall), 4),
         "f1_weighted": round(float(f1), 4),
+        "confusion_matrix": cm,
         "classification_report": report,
     }
 

@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Spare Parts Catalog | Thunderbird 350X Smart Garage{% endblock %}
+
+{% block content %}
+<div class="card-header" style="border: none; padding-bottom: 0;">
+  <div>
+    <h1 class="page-title">Royal Enfield Thunderbird 350X Spare Parts Catalog</h1>
+    <p class="page-subtitle">Search verified component records, filter by city or budget, and book workshop fitting.</p>
+  </div>
+</div>
+
+<!-- Search & Multi-Filter Bar -->
+<div class="filter-card">
+  <form method="GET" action="{{ url_for('search_parts_view') }}">
+    <div class="grid-4" style="margin-bottom: 14px;">
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label" for="part_name">Part Name</label>
+        <input type="text" id="part_name" name="part_name" class="form-control" placeholder="e.g. Clutch Cable, Filter" value="{{ request.args.get('part_name', '') }}">
+      </div>
+
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label" for="category">Category</label>
+        <select id="category" name="category" class="form-control">
+          <option value="">All Categories</option>
+          {% for cat in categories %}
+            <option value="{{ cat }}" {% if request.args.get('category') == cat %}selected{% endif %}>{{ cat }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label" for="availability">Availability Status</label>
+        <select id="availability" name="availability" class="form-control">
+          <option value="">All Statuses</option>
+          <option value="Available" {% if request.args.get('availability') == 'Available' %}selected{% endif %}>Available</option>
+          <option value="Limited" {% if request.args.get('availability') == 'Limited' %}selected{% endif %}>Limited Stock</option>
+          <option value="Discontinued" {% if request.args.get('availability') == 'Discontinued' %}selected{% endif %}>Discontinued</option>
+        </select>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label" for="city">City</label>
+        <select id="city" name="city" class="form-control">
+          <option value="">All Cities</option>
+          {% for c in cities %}
+            <option value="{{ c }}" {% if request.args.get('city') == c %}selected{% endif %}>{{ c }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="grid-4">
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label" for="condition">Part Condition</label>
+        <select id="condition" name="condition" class="form-control">
+          <option value="">All Conditions</option>
+          <option value="New" {% if request.args.get('condition') == 'New' %}selected{% endif %}>Brand New</option>
+          <option value="OEM Old Stock" {% if request.args.get('condition') == 'OEM Old Stock' %}selected{% endif %}>OEM Old Stock</option>
+          <option value="Used" {% if request.args.get('condition') == 'Used' %}selected{% endif %}>Inspected Used</option>
+        </select>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label" for="max_price">Max Price (INR)</label>
+        <input type="number" id="max_price" name="max_price" class="form-control" placeholder="e.g. 5000" value="{{ request.args.get('max_price', '') }}">
+      </div>
+
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label" for="max_wait_days">Max Wait (Days)</label>
+        <input type="number" id="max_wait_days" name="max_wait_days" class="form-control" placeholder="e.g. 10" value="{{ request.args.get('max_wait_days', '') }}">
+      </div>
+
+      <div style="display: flex; align-items: flex-end; gap: 8px;">
+        <button type="submit" class="btn btn-primary" style="flex: 1;">Filter</button>
+        <a href="{{ url_for('search_parts_view') }}" class="btn btn-outline" style="flex: 1;">Reset</a>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- Results Table -->
+<div class="card">
+  <div class="card-header">
+    <h3>Found {{ parts|length }} Matching Spare Parts</h3>
+    <small style="color: #64748b;">Academic Synthetic Dataset Records</small>
+  </div>
+
+  {% if parts %}
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Part Name</th>
+            <th>Category</th>
+            <th>Condition</th>
+            <th>Availability</th>
+            <th>Est. Price</th>
+            <th>Est. Wait</th>
+            <th>Supplier Type</th>
+            <th>City</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for part in parts %}
+            <tr>
+              <td>
+                <strong>{{ part.part_name }}</strong><br>
+                <small style="color: #64748b;">RE Thunderbird 350X ({{ part.manufacturing_year }})</small>
+              </td>
+              <td>{{ part.part_category }}</td>
+              <td><span style="font-size: 0.82rem; color: #475569;">{{ part.part_condition }}</span></td>
+              <td>
+                <span class="badge badge-{{ part.availability_status|lower }}">
+                  {{ part.availability_status }}
+                </span>
+              </td>
+              <td><strong>₹{{ part.estimated_price }}</strong></td>
+              <td>{{ part.estimated_wait_days }} days</td>
+              <td><span style="font-size: 0.82rem; color: #475569;">{{ part.supplier_type }}</span></td>
+              <td>{{ part.city }}</td>
+              <td>
+                <a href="{{ url_for('new_service_request_view') }}?part_name={{ part.part_name|urlencode }}&part_category={{ part.part_category|urlencode }}&city={{ part.city|urlencode }}&est_price={{ part.estimated_price }}&wait_days={{ part.estimated_wait_days }}" class="btn btn-primary btn-sm">
+                  Book Fitting
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div style="text-align: center; padding: 40px 20px; color: #64748b;">
+      <p style="font-size: 1.1rem; margin-bottom: 10px;">No spare parts matched your selected filters.</p>
+      <p style="font-size: 0.88rem; margin-bottom: 20px;">Try clearing some filters or searching for common parts like "Clutch", "Brake", or "Filter".</p>
+      <a href="{{ url_for('search_parts_view') }}" class="btn btn-secondary btn-sm">Clear All Filters</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

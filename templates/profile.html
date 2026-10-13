@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Account Profile | Thunderbird 350X Smart Garage{% endblock %}
+
+{% block content %}
+<div style="max-width: 580px; margin: 24px auto;">
+  <div class="card" style="border-top: 4px solid var(--re-red);">
+    <div class="card-header">
+      <h2>Account Profile</h2>
+      <span class="badge" style="background-color: #f1f5f9; color: #334155;">{{ user.role|upper }}</span>
+    </div>
+
+    <div class="prediction-metric-row">
+      <span style="font-weight: 600;">Full Name:</span>
+      <span>{{ user.full_name }}</span>
+    </div>
+    <div class="prediction-metric-row">
+      <span style="font-weight: 600;">Username:</span>
+      <code>{{ user.username }}</code>
+    </div>
+    <div class="prediction-metric-row">
+      <span style="font-weight: 600;">Email:</span>
+      <span>{{ user.email }}</span>
+    </div>
+    <div class="prediction-metric-row">
+      <span style="font-weight: 600;">Contact Phone:</span>
+      <span>{{ user.phone or 'Not provided' }}</span>
+    </div>
+    <div class="prediction-metric-row">
+      <span style="font-weight: 600;">Operating City:</span>
+      <span>{{ user.city }}</span>
+    </div>
+    <div class="prediction-metric-row">
+      <span style="font-weight: 600;">Account Created:</span>
+      <span style="font-size: 0.85rem; color: #64748b;">{{ user.created_at }}</span>
+    </div>
+
+    <div style="margin-top: 24px; display: flex; gap: 10px;">
+      {% if user.role == 'garage' %}
+        <a href="{{ url_for('garage_dashboard') }}" class="btn btn-secondary" style="flex: 1;">To Garage Dashboard</a>
+      {% else %}
+        <a href="{{ url_for('user_dashboard') }}" class="btn btn-primary" style="flex: 1;">To My Dashboard</a>
+      {% endif %}
+      <a href="{{ url_for('logout') }}" class="btn btn-outline-red">Sign Out</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

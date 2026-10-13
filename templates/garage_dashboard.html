@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Garage Management Portal | Thunderbird 350X Smart Garage{% endblock %}
+
+{% block content %}
+<div class="card" style="border-left: 4px solid #4b5563; margin-bottom: 24px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+    <div>
+      <h1 class="page-title" style="margin-bottom: 4px;">{{ garage.garage_name }}</h1>
+      <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 0;">
+        Speciality: <strong>{{ garage.speciality }}</strong> &bull; City: <strong>{{ garage.city }}</strong> &bull; Rating: <strong>★ {{ garage.rating }}</strong>
+      </p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <span class="nav-user-badge" style="background-color: #065f46; border-color: #10b981; font-size: 0.85rem;">Workshop Active</span>
+    </div>
+  </div>
+</div>
+
+<!-- Stats widgets -->
+<div class="grid-4" style="margin-bottom: 24px;">
+  <div class="stat-widget">
+    <div class="stat-value">{{ requests|length }}</div>
+    <div class="stat-label">Total Assigned Jobs</div>
+  </div>
+  <div class="stat-widget amber">
+    <div class="stat-value">{{ requests|selectattr('status', 'equalto', 'Pending')|list|length }}</div>
+    <div class="stat-label">Pending Acceptance</div>
+  </div>
+  <div class="stat-widget blue">
+    <div class="stat-value">{{ requests|selectattr('status', 'in', ['Accepted', 'In Progress'])|list|length }}</div>
+    <div class="stat-label">In Workshop Progress</div>
+  </div>
+  <div class="stat-widget green">
+    <div class="stat-value">{{ requests|selectattr('status', 'equalto', 'Completed')|list|length }}</div>
+    <div class="stat-label">Completed Repairs</div>
+  </div>
+</div>
+
+<!-- Service Requests Management Table -->
+<div class="card">
+  <div class="card-header">
+    <h2>Incoming &amp; Assigned Service Requests</h2>
+    <span style="font-size: 0.85rem; color: #64748b;">Showing jobs in {{ garage.city }}</span>
+  </div>
+
+  {% if requests %}
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Request ID</th>
+            <th>Customer</th>
+            <th>Contact</th>
+            <th>Required Part</th>
+            <th>Est. Price</th>
+            <th>Priority</th>
+            <th>Current Status</th>
+            <th>Action / Update</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for req in requests %}
+            <tr>
+              <td><strong>{{ req.request_id }}</strong></td>
+              <td>
+                {{ req.user_name }}<br>
+                <small style="color: #64748b;">{{ req.bike_model }}</small>
+              </td>
+              <td>
+                {{ req.user_phone }}<br>
+                <small style="color: #64748b;">{{ req.user_email }}</small>
+              </td>
+              <td>
+                <strong>{{ req.part_name }}</strong><br>
+                <small style="color: #64748b;">{{ req.issue_description }}</small>
+              </td>
+              <td>₹{{ "%.0f"|format(req.estimated_price) }}</td>
+              <td>
+                <span class="badge" style="background-color: {% if req.priority == 'Critical' %}#fee2e2; color: #991b1b;{% elif req.priority == 'High' %}#ffedd5; color: #9a3412;{% else %}#f1f5f9; color: #334155;{% endif %}">
+                  {{ req.priority }}
+                </span>
+              </td>
+              <td>
+                <span class="badge badge-{{ req.status|lower|replace(' ', '-') }}">
+                  {{ req.status }}
+                </span>
+              </td>
+              <td>
+                <!-- Direct Inline Status Update Form -->
+                <form action="{{ url_for('update_service_request_status_view', req_id=req.request_id) }}" method="POST" style="display: flex; flex-direction: column; gap: 6px; min-width: 200px;">
+                  <div style="display: flex; gap: 4px;">
+                    <select name="status" class="form-control" style="font-size: 0.82rem; padding: 4px 6px;">
+                      <option value="Pending" {% if req.status == 'Pending' %}selected{% endif %}>Pending</option>
+                      <option value="Accepted" {% if req.status == 'Accepted' %}selected{% endif %}>Accept Request</option>
+                      <option value="In Progress" {% if req.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                      <option value="Completed" {% if req.status == 'Completed' %}selected{% endif %}>Completed</option>
+                      <option value="Cancelled" {% if req.status == 'Cancelled' %}selected{% endif %}>Reject / Cancel</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary btn-sm" style="padding: 4px 8px;">Update</button>
+                  </div>
+                  <input type="text" name="notes" class="form-control" placeholder="Optional mechanic note" value="{{ req.garage_notes or '' }}" style="font-size: 0.78rem; padding: 3px 6px;">
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div style="text-align: center; padding: 32px 16px; color: #64748b;">
+      <p>No customer service requests assigned to your garage yet.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

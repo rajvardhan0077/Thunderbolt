@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Garage Login | Thunderbird 350X Smart Garage{% endblock %}
+
+{% block content %}
+<div style="max-width: 440px; margin: 30px auto;">
+  <div class="card" style="border-top: 4px solid #4b5563;">
+    <div style="text-align: center; margin-bottom: 20px;">
+      <span style="font-size: 2rem;">&#128295;</span>
+      <h2 style="font-size: 1.4rem; color: var(--bg-dark); margin-top: 8px;">Garage Login</h2>
+      <p style="font-size: 0.88rem; color: var(--text-muted);">Manage incoming Royal Enfield service orders</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('login_garage') }}">
+      <div class="form-group">
+        <label class="form-label" for="username">Garage Account</label>
+        <input type="text" id="username" name="username" class="form-control" placeholder="Enter garage username or email" value="garage_demo" required autofocus>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" value="garage123" required>
+      </div>
+
+      <button type="submit" class="btn btn-secondary" style="width: 100%; margin-top: 10px;">Sign In as Garage</button>
+    </form>
+
+    <div style="background-color: #f8fafc; border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); padding: 12px; margin-top: 20px; font-size: 0.82rem; color: #475569;">
+      <strong>Demo Credentials (Examiner Quick Test):</strong><br>
+      Username: <code>garage_demo</code> &bull; Password: <code>garage123</code>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; margin-top: 18px; font-size: 0.85rem;">
+      <a href="{{ url_for('login_user') }}" style="color: var(--text-muted);">Switch to User Login</a>
+      <a href="{{ url_for('register') }}" style="color: var(--re-red); font-weight: 600;">Create Account</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

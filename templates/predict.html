@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block title %}AI Spare Parts Predictor | Thunderbird 350X Smart Garage{% endblock %}
+
+{% block content %}
+<div class="card-header" style="border: none; padding-bottom: 0;">
+  <div>
+    <h1 class="page-title">Royal Enfield Thunderbird 350X &bull; AI Prediction Engine</h1>
+    <p class="page-subtitle">Machine Learning predictions for stock availability classification, transit delay regression, and replacement pricing.</p>
+  </div>
+</div>
+
+<div class="grid-2">
+  <!-- Input Form -->
+  <div class="card">
+    <div class="card-header">
+      <h3>Enter Component Specifications</h3>
+    </div>
+
+    <form id="prediction-form">
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label" for="bike_model">Bike Model</label>
+          <input type="text" id="bike_model" name="bike_model" class="form-control" value="Royal Enfield Thunderbird 350X" readonly style="background-color: #f1f5f9;">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="manufacturing_year">Model Year</label>
+          <select id="manufacturing_year" name="manufacturing_year" class="form-control">
+            <option value="2018">2018</option>
+            <option value="2019" selected>2019</option>
+            <option value="2020">2020 (BS4 Final Batch)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label" for="part_name">Part Name</label>
+          <input type="text" id="part_name" name="part_name" class="form-control" placeholder="e.g. Clutch Cable, Ignition Coil" value="Clutch Cable" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="part_category">Category</label>
+          <select id="part_category" name="part_category" class="form-control">
+            <option value="Engine/Clutch">Engine/Clutch</option>
+            <option value="Control" selected>Control</option>
+            <option value="Braking">Braking</option>
+            <option value="Electrical">Electrical</option>
+            <option value="Suspension">Suspension</option>
+            <option value="Transmission">Transmission</option>
+            <option value="Wheels">Wheels</option>
+            <option value="Tyre">Tyre</option>
+            <option value="Body">Body</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label" for="city">Target City</label>
+          <select id="city" name="city" class="form-control">
+            <option value="Pune" selected>Pune</option>
+            <option value="Mumbai">Mumbai</option>
+            <option value="Nashik">Nashik</option>
+            <option value="Kolhapur">Kolhapur</option>
+            <option value="Aurangabad">Aurangabad</option>
+            <option value="Satara">Satara</option>
+            <option value="Solapur">Solapur</option>
+            <option value="Ahmednagar">Ahmednagar</option>
+            <option value="Sangli">Sangli</option>
+            <option value="Baramati">Baramati</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="supplier_type">Supplier Channel</label>
+          <select id="supplier_type" name="supplier_type" class="form-control">
+            <option value="Authorized Dealer">Authorized Dealer</option>
+            <option value="Online Supplier" selected>Online Supplier</option>
+            <option value="Independent Distributor">Independent Distributor</option>
+            <option value="Local Spare Parts Dealer">Local Spare Parts Dealer</option>
+            <option value="Used Parts Supplier">Used Parts Supplier</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label" for="garage_type">Preferred Garage Type</label>
+          <select id="garage_type" name="garage_type" class="form-control">
+            <option value="Royal Enfield Specialist" selected>Royal Enfield Specialist</option>
+            <option value="Authorized Service Center">Authorized Service Center</option>
+            <option value="Multi-brand Bike Garage">Multi-brand Bike Garage</option>
+            <option value="Local Motorcycle Garage">Local Motorcycle Garage</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="part_condition">Condition</label>
+          <select id="part_condition" name="part_condition" class="form-control">
+            <option value="New" selected>Brand New</option>
+            <option value="OEM Old Stock">OEM Old Stock</option>
+            <option value="Used">Inspected Used</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="service_priority">Service Priority</label>
+        <select id="service_priority" name="service_priority" class="form-control">
+          <option value="Low">Low (Routine Checkup)</option>
+          <option value="Medium">Medium (Upcoming Ride)</option>
+          <option value="High" selected>High (Part Failing)</option>
+          <option value="Critical">Critical (Breakdown)</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Run Machine Learning Estimation</button>
+    </form>
+  </div>
+
+  <!-- Results Output -->
+  <div>
+    <div id="prediction-error" class="flash-alert flash-danger" style="display: none;"></div>
+
+    <div id="prediction-results" class="card" style="display: none; border-top: 4px solid #10b981;">
+      <div class="card-header">
+        <h3>Model Predictions &amp; Estimates</h3>
+        <span class="badge" style="background-color: #ecfdf5; color: #047857;">Inference Complete</span>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <h4 id="res-part-name" style="font-size: 1.25rem; color: var(--bg-dark); margin-bottom: 2px;">-</h4>
+        <small id="res-category" style="color: var(--text-muted); text-transform: uppercase;">-</small>
+      </div>
+
+      <div class="prediction-result-panel">
+        <div class="prediction-metric-row">
+          <span style="font-weight: 600;">Stock Availability (Classification):</span>
+          <span id="res-availability" class="badge">-</span>
+        </div>
+        <div class="prediction-metric-row">
+          <span style="font-weight: 600;">Model Confidence:</span>
+          <span id="res-confidence" style="font-weight: 700; color: #047857;">-</span>
+        </div>
+        <div class="prediction-metric-row">
+          <span style="font-weight: 600;">Estimated Waiting Time:</span>
+          <span id="res-wait" style="font-weight: 700; color: #b45309;">-</span>
+        </div>
+        <div class="prediction-metric-row">
+          <span style="font-weight: 600;">Estimated Replacement Price:</span>
+          <span id="res-price" style="font-weight: 700; color: var(--re-red); font-size: 1.1rem;">-</span>
+        </div>
+      </div>
+
+      <div style="background-color: #fffbeb; border: 1px solid #fde68a; border-radius: var(--radius-sm); padding: 12px; margin: 20px 0; font-size: 0.82rem; color: #92400e;">
+        <strong>Notice:</strong> This prediction is generated from trained models on academic synthetic records. Predictions represent educational estimates and not a live stock guarantee.
+      </div>
+
+      <a id="res-request-link" href="#" class="btn btn-primary" style="width: 100%;">
+        Book Service Request with this Component &rarr;
+      </a>
+    </div>
+
+    <!-- Methodology Summary Card for Viva -->
+    <div class="card">
+      <div class="card-header">
+        <h3>ML Architecture Summary</h3>
+      </div>
+      <p style="font-size: 0.88rem; color: #475569; margin-bottom: 12px;">
+        Models loaded from <code>ML/models/</code>:
+      </p>
+      <ul style="font-size: 0.85rem; color: #475569; padding-left: 20px; line-height: 1.7;">
+        <li><strong>Availability:</strong> Decision Tree Classifier with weighted F1 evaluation</li>
+        <li><strong>Wait Time:</strong> Random Forest Regressor (MAE &amp; RMSE optimized)</li>
+        <li><strong>Price Estimation:</strong> Linear Regression pipeline with OneHot encoding</li>
+      </ul>
+      <div style="margin-top: 14px;">
+        <a href="{{ url_for('ml_metrics_view') }}" class="btn btn-outline btn-sm">Inspect Complete Evaluation Metrics &rarr;</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

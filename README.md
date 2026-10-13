@@ -1,231 +1,303 @@
 # Smart Garage & Spare Parts Assistance System for Royal Enfield Thunderbird 350X
 
-This project is a prototype AI/ML and mobile application for assisting with Royal Enfield Thunderbird 350X spare-part availability, waiting time, price estimation, and garage recommendation.
+An engineering degree college project developed for Third-Year Artificial Intelligence & Data Science Engineering.  
+This system addresses maintenance, part sourcing, transit delay estimation, and workshop coordination for the discontinued **Royal Enfield Thunderbird 350X** motorcycle.
 
-## Problem statement
+---
 
-Royal Enfield Thunderbird 350X is a discontinued motorcycle model, so finding compatible spare parts, estimating delays, and identifying suitable suppliers or garages can be difficult. This project demonstrates a practical AI/ML prototype that helps users search for a part, estimate availability, estimate price, and identify suitable recommendation options.
+## 1. Project Overview
 
-## Objective
+The **Royal Enfield Thunderbird 350X** is a modern-classic urban cruiser motorcycle that was discontinued by Royal Enfield. Because official factory assembly has ended, sourcing genuine OEM replacement spares, estimating shipping delays across different cities, and finding specialized mechanics poses a significant challenge for riders.
 
-- Search for a part by model, category, and city
-- Predict whether it is Available, Limited, or Discontinued
-- Estimate waiting time in days
-- Estimate expected price in INR
-- Rank garages and suppliers based on a transparent score
-- Submit and review service requests through a mobile app
+This project delivers a complete, end-to-end assistance platform that combines:
+1. **Machine Learning Predictive Analytics:** Predicts part availability status (Available, Limited, Discontinued), forecasts waiting periods in transit days, and estimates replacement costs in Indian Rupees (INR).
+2. **Transparent Multi-Factor Garage Matching:** Ranks authorized and specialist motorcycle garages using an explainable mathematical scoring formula.
+3. **Role-Based Web Application:** Provides a dedicated **User (Rider) Portal** and **Garage (Workshop) Portal** with session-based authentication, request submission, and live repair status tracking.
+4. **Local SQLite Persistence:** Safely stores accounts, spare-parts inventory, and service request workflows.
 
-## Demo / synthetic data notice
+---
 
-This project uses a prototype demo dataset. Predictions are estimates only and do not represent guaranteed live inventory, live prices, or live garage availability.
+## 2. Key Features
 
-## Features
+- **Dual-Portal Authentication (`/login`):**
+  - Single login selection landing page offering explicit **USER LOGIN** and **GARAGE LOGIN** options.
+  - Role-based backend route guards (`@user_required`, `@garage_required`) preventing privilege escalation.
+  - Secure password hashing using `werkzeug.security`.
+- **Spare Parts Search & Filter (`/parts`):**
+  - Search catalog with multi-filters: Part Name, Category, Availability Status, City, Condition (New, OEM Old Stock, Used), Max Price, and Max Wait Days.
+  - Direct "Book Fitting" button linking parts to the service request form.
+- **AI Prediction Engine (`/predict` & `/api/predict-...`):**
+  - Interactive web form & REST API endpoints for predicting stock availability, transit waiting days, and replacement pricing.
+  - Provides confidence scores and transparent academic disclosures.
+- **Garage Recommendations (`/recommendations`):**
+  - Ranks workshops using a deterministic 5-factor equation suitable for viva defense.
+- **End-to-End Service Request Workflow:**
+  - Riders create requests with tracking IDs (e.g., `SR-2026-0001`).
+  - Garages view incoming orders, accept/reject, update status (`Pending`, `Accepted`, `In Progress`, `Completed`, `Cancelled`), and post mechanic notes.
+- **Examiner Evaluation Dashboard (`/ml-metrics`):**
+  - Real-time display of empirical model comparison benchmarks, confusion matrices, and regression metrics.
 
-- ML-based part availability classification
-- Regression for waiting time and price estimation
-- Transparent garage recommendation logic
-- Flask REST API for backend prediction services
-- Flutter mobile UI for search and submission
-- Service request submission and status display
+---
 
-## Technology stack
+## 3. Technology Stack
 
-- Python
-- pandas
-- scikit-learn
-- Flask
-- Flask-CORS
-- joblib
-- Flutter
-- Dart
-- Firebase (optional / configuration if added later)
+- **Backend:** Python 3.11 / 3.14, Flask 3.0+, Flask-CORS
+- **Database:** SQLite 3 (parameterized queries, relational foreign keys)
+- **Machine Learning & Preprocessing:** scikit-learn, pandas, NumPy, joblib
+- **Frontend:** Responsive Vanilla HTML5, CSS3, JavaScript (Automotive Charcoal & Deep RE Red theme)
+- **Automated Testing:** pytest (20 automated end-to-end tests)
+- **Security:** Werkzeug password hashing, Flask session cookies
 
-## Project structure
+---
 
-- `Dataset/` – project dataset
-- `ML/` – preprocessing and model training scripts
-- `Backend/` – Flask API implementation
-- `Flutter_App/` – Flutter mobile application
-- `docs/` – project documentation
-- `tests/` – automated tests
+## 4. Project Directory Structure
 
-## System architecture
-
-1. Flutter app collects part details.
-2. Flask backend validates and preprocesses input.
-3. Trained ML models predict availability, wait time, and price.
-4. Garage ranking uses the dataset to present a recommended list.
-5. Results and requests are shown to the user.
-
-## Dataset description
-
-The dataset contains synthetic/demo records for Thunderbird 350X spare parts. It includes fields such as:
-
-- Bike model
-- Manufacturing year
-- Part name
-- Part category
-- Availability status
-- Estimated wait days
-- Estimated price (INR)
-- Supplier type
-- City
-- Garage type
-- Part condition
-- Service priority
-- Record date
-
-## ML methodology
-
-The code in `ML/02_preprocessing_and_modeling.py` preprocesses the dataset and trains:
-
-- availability classification model
-- wait-time regression model
-- price estimation regression model
-
-Models are trained with a fixed random seed, evaluated with real metrics, and saved as `.pkl` files.
-
-## Algorithms used
-
-- Logistic Regression
-- Decision Tree
-- Random Forest
-- Linear Regression
-- Decision Tree Regressor
-- Random Forest Regressor
-
-## Evaluation metrics
-
-- Accuracy
-- Weighted precision
-- Weighted recall
-- Weighted F1-score
-- MAE
-- MSE
-- RMSE
-- R²
-
-## Backend API documentation
-
-See `docs/api_documentation.md`.
-
-## Flutter application
-
-The Flutter app in `Flutter_App/` provides:
-
-- splash screen
-- login/register UI
-- home dashboard
-- part search form
-- prediction results
-- garage recommendations
-- service request form
-- status screen
-
-## Firebase setup
-
-Firebase is optional and should only be used if configured in a separate setup. This project keeps ML prediction logic in the Flask API rather than forcing Firebase into the model pipeline.
-
-## Google Maps setup
-
-Maps integration should only be added if real location data is available. The project does not claim real-time location accuracy without an actual configuration and data source.
-
-## Installation instructions
-
-### Python environment
-
-Because of a Windows Application Control policy blocking some pandas/scipy DLLs on this machine, direct local execution is blocked here. Train the model in a non-blocked environment such as Google Colab or a Linux VM.
-
-#### In Colab
-
-```python
-!pip install pandas numpy scikit-learn joblib flask flask-cors
-!python ML/05_colab_training.py
+```text
+Thunderbird350X_Project/
+├── app.py                     # Root execution entry point
+├── requirements.txt           # Python package dependencies
+├── README.md                  # Project documentation & viva guide
+├── .gitignore                 # Safe repository ignore rules
+├── Backend/
+│   ├── app.py                 # Core Flask application & REST API routes
+│   ├── database.py            # SQLite schema, tables, and CRUD operations
+│   ├── requirements.txt       # Backend dependency manifest
+│   └── data/
+│       ├── thunderbird_garage.db  # Local SQLite database (auto-seeded)
+│       └── service_requests.json  # Legacy JSON storage backup
+├── Dataset/
+│   └── royal_enfield_thunderbird_350x_parts_dataset.csv  # 500 academic records
+├── ML/
+│   ├── 01_data_inspection.py           # Dataset inspection script
+│   ├── 02_preprocessing_and_modeling.py # ML training & evaluation pipeline
+│   ├── 03_model_comparison.ipynb       # Jupyter notebook comparison
+│   ├── 04_train_final_models.py        # Model retraining launcher
+│   ├── 05_colab_training.py            # Colab training backup
+│   └── models/
+│       ├── availability_model.pkl      # Decision Tree classifier
+│       ├── wait_model.pkl              # Random Forest regressor
+│       ├── price_model.pkl             # Linear Regression model
+│       └── metrics.json                # Empirical evaluation results
+├── EDA/
+│   ├── 01_data_inspection.py
+│   └── 01_data_inspection_colab.py
+├── templates/                 # Web application Jinja2 templates
+│   ├── base.html              # Layout, navbar, disclaimer banner, footer
+│   ├── index.html             # Home landing page with metrics
+│   ├── login_select.html      # Two-choice portal selection (/login)
+│   ├── login_user.html        # Rider login form
+│   ├── login_garage.html      # Workshop login form
+│   ├── register.html          # User and garage registration form
+│   ├── user_dashboard.html    # Rider dashboard & request status
+│   ├── garage_dashboard.html  # Workshop management & status updater
+│   ├── parts_search.html      # Multi-filter spare parts catalog
+│   ├── predict.html           # Interactive AI prediction tool
+│   ├── recommendations.html   # Transparent garage ranking
+│   ├── new_request.html       # Service order submission form
+│   ├── service_requests.html  # User repair tracking timeline
+│   ├── ml_metrics.html        # Examiner viva metrics dashboard
+│   └── profile.html           # User account profile
+├── static/
+│   ├── css/
+│   │   └── styles.css         # Automotive styling design system
+│   └── js/
+│       └── main.js            # Client-side AJAX prediction & helpers
+├── tests/
+│   └── test_pipeline.py       # 20 automated pytest unit & integration tests
+├── docs/                      # Technical documentation files
+│   ├── api_documentation.md
+│   ├── architecture.md
+│   ├── viva_questions.md
+│   └── ml_methodology.md
+└── Flutter_App/               # Preserved mobile app assets
 ```
 
-#### In a clean Python environment
+---
 
-```bash
+## 5. Dataset Location & Academic Limitations
+
+- **File Path:** `Dataset/royal_enfield_thunderbird_350x_parts_dataset.csv`
+- **Verified Dimensions:** 500 records &bull; 13 columns &bull; 0 missing values &bull; 0 duplicate rows
+- **Columns:**
+  `Bike model`, `Manufacturing year`, `Part name`, `Part category`, `Availability status`, `Estimated wait days`, `Estimated price (INR)`, `Supplier type`, `City`, `Garage type`, `Part condition`, `Service priority`, `Record date`.
+
+### Important Academic Data Disclosure
+> **Notice:** The dataset contains synthetic academic data created for university project demonstrations. It does **not** represent verified live Royal Enfield factory inventory, real-time distributor warehouse stock, or guaranteed market quotations. All predictions, prices, and transit days must be treated as educational estimates.
+
+---
+
+## 6. Machine Learning Methodology & Empirical Results
+
+The pipeline uses `sklearn.compose.ColumnTransformer` with `OneHotEncoder` and `SimpleImputer` inside reproducible pipelines (`random_state=42`, 80/20 train/test split).
+
+### A. Availability Classification (3 Classes: Available, Limited, Discontinued)
+Evaluated with Accuracy, Weighted Precision, Weighted Recall, Weighted F1, and Confusion Matrix.
+
+| Algorithm | Accuracy | Weighted Precision | Weighted Recall | Weighted F1-Score | Status |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Decision Tree Classifier** | **37.0%** | **39.83%** | **37.0%** | **37.50%** | **Selected (Best F1)** |
+| Logistic Regression | 41.0% | 37.18% | 41.0% | 37.46% | Evaluated |
+| Random Forest Classifier | 38.0% | 27.91% | 38.0% | 30.84% | Evaluated |
+
+### B. Waiting Time Regression (Days)
+Evaluated with Mean Absolute Error (MAE), Root Mean Squared Error (RMSE), and R²:
+
+| Algorithm | MAE | RMSE | R² Score | Status |
+| :--- | :---: | :---: | :---: | :---: |
+| **Random Forest Regressor** | **9.83 days** | **13.68 days** | **-0.118** | **Selected (Lowest MAE)** |
+| Linear Regression | 10.86 days | 14.77 days | -0.305 | Evaluated |
+| Decision Tree Regressor | 12.38 days | 19.72 days | -1.325 | Evaluated |
+
+### C. Spare Part Price Regression (INR)
+Evaluated with MAE, RMSE, and R²:
+
+| Algorithm | MAE | RMSE | R² Score | Status |
+| :--- | :---: | :---: | :---: | :---: |
+| **Linear Regression** | **₹619.55** | **₹967.92** | **0.8610** | **Selected (Best R²)** |
+| Random Forest Regressor | ₹653.93 | ₹1098.38 | 0.8210 | Evaluated |
+| Decision Tree Regressor | ₹963.90 | ₹1670.53 | 0.5859 | Evaluated |
+
+---
+
+## 7. Transparent Garage Recommendation Formula (Viva Defense)
+
+To ensure full transparency during viva examinations, garage rankings avoid black-box obscurity. Each candidate is assigned an explainable score out of 100:
+
+$$\text{Score} = 100 \times \left(0.40 \cdot S_{\text{avail}} + 0.25 \cdot S_{\text{wait}} + 0.20 \cdot S_{\text{price}} + 0.10 \cdot S_{\text{garage}} + 0.05 \cdot S_{\text{supplier}}\right)$$
+
+- **$S_{\text{avail}}$:** Stock availability weight ($1.0$ for Available, $0.6$ for Limited, $0.2$ for Discontinued).
+- **$S_{\text{wait}}$:** Reciprocal normalized transit delay $\max(0, 1 - \frac{\text{Wait}}{\text{MaxWait}})$.
+- **$S_{\text{price}}$:** Reciprocal normalized component cost $\max(0, 1 - \frac{\text{Price}}{\text{MaxPrice}})$.
+- **$S_{\text{garage}}$:** Workshop category bonus ($0.7$ for Royal Enfield Specialists, $0.5$ for General).
+- **$S_{\text{supplier}}$:** Supplier reliability bonus ($0.9$ for OEM Authorized, $0.6$ for Third-party).
+
+---
+
+## 8. Installation & Setup on Windows
+
+### Prerequisites
+- Windows 10 or 11
+- Python 3.11+ (or Python 3.14) installed and added to `PATH`
+- VS Code or Windows PowerShell
+
+### Step 1: Clone / Open Project Folder
+Open PowerShell in the project directory:
+```powershell
+cd D:\Docs\Projects\Thunderbird350X_Project
+```
+
+### Step 2: Create & Activate Virtual Environment
+```powershell
 python -m venv .venv
-source .venv/bin/activate
-pip install -r Backend/requirements.txt
-python ML/04_train_final_models.py
+.venv\Scripts\Activate.ps1
 ```
 
-## How to train models
-
-```bash
-cd "ML Project/Thunderbird350X_Project"
-python ML/04_train_final_models.py
+### Step 3: Install Required Packages
+```powershell
+pip install -r requirements.txt
 ```
 
-If the machine is blocked by the DLL policy, use the Colab script instead:
-
-```python
-!python ML/05_colab_training.py
+### Step 4: Train Machine Learning Models (Optional - Pretrained models included)
+If you wish to retrain all models from scratch:
+```powershell
+python ML/02_preprocessing_and_modeling.py
 ```
 
-## How to start the backend
+### Step 5: Initialize the Database (Auto-initialized on startup)
+The SQLite database `Backend/data/thunderbird_garage.db` is initialized and seeded automatically whenever the app starts. To test manually:
+```powershell
+python -c "import sys; sys.path.insert(0, 'Backend'); import database; database.seed_db()"
+```
 
-```bash
-cd "ML Project/Thunderbird350X_Project/Backend"
+---
+
+## 9. How to Run the Application
+
+Start the local web server with:
+```powershell
 python app.py
 ```
 
-## How to run the Flutter app
+Open your browser and navigate to:
+```text
+http://127.0.0.1:5000
+```
+
+### Pre-Configured Demo Accounts for Testing & Viva Demonstration
+
+| Role | Portal Link | Username | Password | Purpose |
+| :--- | :--- | :--- | :--- | :--- |
+| **Motorcycle Rider** | [http://127.0.0.1:5000/login/user](http://127.0.0.1:5000/login/user) | `user_demo` | `password123` | Part searching, AI predictions, order booking |
+| **Service Garage** | [http://127.0.0.1:5000/login/garage](http://127.0.0.1:5000/login/garage) | `garage_demo` | `garage123` | Workshop order management, status updates |
+
+---
+
+## 10. Automated Testing
+
+Run the automated test suite with pytest:
+```powershell
+pytest tests/test_pipeline.py -v
+```
+
+All **20 tests** validate:
+- Dataset integrity & column presence
+- SQLite database tables, seeding, and foreign keys
+- Home page, login selection, and auth redirection
+- Role-based access control (User vs. Garage boundaries)
+- Trained model loading & inference output
+- Availability, waiting-time, and price prediction APIs
+- Error handling on invalid/empty JSON payloads
+- Spare parts multi-filter catalog queries
+- End-to-end service request lifecycle (create &rarr; accept &rarr; in-progress &rarr; complete)
+- Unauthorized cross-garage status update prevention
+
+---
+
+## 11. REST API Reference
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/api/health` | Service health status and model load verification |
+| `POST` | `/api/predict-availability` | Predicts availability category (`Available`, `Limited`, `Discontinued`) |
+| `POST` | `/api/predict-wait` | Forecasts estimated transit waiting time in days |
+| `POST` | `/api/predict-price` | Predicts expected replacement price in INR |
+| `POST` | `/api/predict-part-details` | Combined prediction with confidence and part summary |
+| `POST` | `/api/find-garages` | Ranks matching workshops with recommendation scores |
+| `POST` | `/api/service-request` | Submits a new customer repair request |
+| `GET` | `/api/service-requests` | Retrieves service requests for the active user/garage |
+| `GET` | `/api/ml-metrics` | Fetches JSON benchmark metrics from `metrics.json` |
+
+---
+
+## 12. Known Limitations & Future Scope
+
+### Known Limitations
+1. **Synthetic Training Records:** Sourced from 500 simulated records; not connected to live OEM ERP or SAP inventory systems.
+2. **Discontinued Model Specificity:** Tuned specifically for Royal Enfield Thunderbird 350X components and may not directly map to newer J-platform models (Meteor 350, Hunter 350).
+3. **Local Deployment:** Configured for local SQLite operation; production deployment would use PostgreSQL with WSGI (Gunicorn).
+
+### Future Scope
+1. Real-time integration with local distributor WhatsApp APIs or automated SMS status alerts.
+2. OCR scanner for physical Royal Enfield part catalogues and bills.
+3. Geo-location mapping (OpenStreetMap / Leaflet) for distance-based workshop routing.
+
+---
+
+## 13. Git Commands for Repository Update
+
+To commit and push your completed project changes to your GitHub repository:
 
 ```bash
-cd "ML Project/Thunderbird350X_Project/Flutter_App"
-flutter pub get
-flutter run
+# 1. Check current status
+git status
+
+# 2. Add modified and newly created project files
+git add app.py requirements.txt README.md .gitignore Backend/ ML/ static/ templates/ tests/
+
+# 3. Commit the changes
+git commit -m "Complete Thunderbird 350X Smart Garage web app, ML models, SQLite auth, and pytest suite"
+
+# 4. Push to your main branch
+git push origin main
 ```
-
-## Example API requests
-
-### Availability check
-
-```json
-{
-  "bike_model": "Royal Enfield Thunderbird 350X",
-  "manufacturing_year": 2019,
-  "part_name": "Clutch Cable",
-  "part_category": "Control",
-  "supplier_type": "Online Supplier",
-  "city": "Pune",
-  "part_condition": "New",
-  "service_priority": "High"
-}
-```
-
-### Garage recommendation
-
-```json
-{
-  "part_name": "Clutch Cable",
-  "city": "Pune"
-}
-```
-
-## Limitations
-
-- Demo/synthetic data is used
-- No live inventory source is connected
-- No live price feed is connected
-- Recommendations are based on the local dataset rather than real-time garage status
-- Model accuracy depends on the data quality and size
-
-## Future scope
-
-- connect live supplier APIs
-- add real service request storage with Firebase
-- add Google Maps distance support when a real API key is configured
-- improve model pipelines with larger real-world data
-- deploy the backend and app for demo testing
-
-## Final project status
-
-ML: partial / blocked locally due to Windows DLL application-control policy
-Backend: implemented as a Flask API scaffold with the required endpoints
-Flutter: implemented as an app skeleton with mobile layout and API integration hooks
-Testing: provided as test code, but actual runtime verification is blocked by the local DLL policy
-Documentation: created and updated in the `docs/` folder
+*(GitHub repository: https://github.com/rajvardhan0077/Thunderbird-350X-Smart-Garage)*

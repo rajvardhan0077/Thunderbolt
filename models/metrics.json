@@ -1,0 +1,303 @@
+{
+  "data_source": "D:\\Docs\\Projects\\Thunderbird350X_Project\\Dataset\\royal_enfield_thunderbird_350x_parts_dataset.csv",
+  "synthetic_demo_data_notice": "This project uses a demo/synthetic dataset of Thunderbird 350X spare-part records for prototype ML work. Predictions are estimates and do not represent guaranteed live inventory, prices, or waiting times.",
+  "classification": {
+    "best_model": "decision_tree",
+    "comparison": [
+      {
+        "model": "logistic_regression",
+        "accuracy": 0.41,
+        "precision_weighted": 0.3718,
+        "recall_weighted": 0.41,
+        "f1_weighted": 0.3746,
+        "confusion_matrix": [
+          [
+            32,
+            4,
+            13
+          ],
+          [
+            17,
+            2,
+            1
+          ],
+          [
+            21,
+            3,
+            7
+          ]
+        ],
+        "classification_report": {
+          "Available": {
+            "precision": 0.45714285714285713,
+            "recall": 0.6530612244897959,
+            "f1-score": 0.5378151260504201,
+            "support": 49.0
+          },
+          "Discontinued": {
+            "precision": 0.2222222222222222,
+            "recall": 0.1,
+            "f1-score": 0.13793103448275862,
+            "support": 20.0
+          },
+          "Limited": {
+            "precision": 0.3333333333333333,
+            "recall": 0.22580645161290322,
+            "f1-score": 0.2692307692307692,
+            "support": 31.0
+          },
+          "accuracy": 0.41,
+          "macro avg": {
+            "precision": 0.33756613756613757,
+            "recall": 0.3262892253675664,
+            "f1-score": 0.31499230992131594,
+            "support": 100.0
+          },
+          "weighted avg": {
+            "precision": 0.37177777777777776,
+            "recall": 0.41,
+            "f1-score": 0.3745771571227961,
+            "support": 100.0
+          }
+        }
+      },
+      {
+        "model": "decision_tree",
+        "accuracy": 0.37,
+        "precision_weighted": 0.3983,
+        "recall_weighted": 0.37,
+        "f1_weighted": 0.375,
+        "confusion_matrix": [
+          [
+            19,
+            11,
+            19
+          ],
+          [
+            4,
+            10,
+            6
+          ],
+          [
+            13,
+            10,
+            8
+          ]
+        ],
+        "classification_report": {
+          "Available": {
+            "precision": 0.5277777777777778,
+            "recall": 0.3877551020408163,
+            "f1-score": 0.4470588235294118,
+            "support": 49.0
+          },
+          "Discontinued": {
+            "precision": 0.3225806451612903,
+            "recall": 0.5,
+            "f1-score": 0.39215686274509803,
+            "support": 20.0
+          },
+          "Limited": {
+            "precision": 0.24242424242424243,
+            "recall": 0.25806451612903225,
+            "f1-score": 0.25,
+            "support": 31.0
+          },
+          "accuracy": 0.37,
+          "macro avg": {
+            "precision": 0.3642608884544369,
+            "recall": 0.38193987272328284,
+            "f1-score": 0.36307189542483664,
+            "support": 100.0
+          },
+          "weighted avg": {
+            "precision": 0.3982787552948843,
+            "recall": 0.37,
+            "f1-score": 0.37499019607843137,
+            "support": 100.0
+          }
+        }
+      },
+      {
+        "model": "random_forest",
+        "accuracy": 0.38,
+        "precision_weighted": 0.2791,
+        "recall_weighted": 0.38,
+        "f1_weighted": 0.3084,
+        "confusion_matrix": [
+          [
+            35,
+            3,
+            11
+          ],
+          [
+            19,
+            0,
+            1
+          ],
+          [
+            25,
+            3,
+            3
+          ]
+        ],
+        "classification_report": {
+          "Available": {
+            "precision": 0.4430379746835443,
+            "recall": 0.7142857142857143,
+            "f1-score": 0.546875,
+            "support": 49.0
+          },
+          "Discontinued": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0,
+            "support": 20.0
+          },
+          "Limited": {
+            "precision": 0.2,
+            "recall": 0.0967741935483871,
+            "f1-score": 0.13043478260869565,
+            "support": 31.0
+          },
+          "accuracy": 0.38,
+          "macro avg": {
+            "precision": 0.21434599156118142,
+            "recall": 0.27035330261136714,
+            "f1-score": 0.2257699275362319,
+            "support": 100.0
+          },
+          "weighted avg": {
+            "precision": 0.2790886075949367,
+            "recall": 0.38,
+            "f1-score": 0.3084035326086957,
+            "support": 100.0
+          }
+        }
+      }
+    ],
+    "metrics": {
+      "model": "decision_tree",
+      "accuracy": 0.37,
+      "precision_weighted": 0.3983,
+      "recall_weighted": 0.37,
+      "f1_weighted": 0.375,
+      "confusion_matrix": [
+        [
+          19,
+          11,
+          19
+        ],
+        [
+          4,
+          10,
+          6
+        ],
+        [
+          13,
+          10,
+          8
+        ]
+      ],
+      "classification_report": {
+        "Available": {
+          "precision": 0.5277777777777778,
+          "recall": 0.3877551020408163,
+          "f1-score": 0.4470588235294118,
+          "support": 49.0
+        },
+        "Discontinued": {
+          "precision": 0.3225806451612903,
+          "recall": 0.5,
+          "f1-score": 0.39215686274509803,
+          "support": 20.0
+        },
+        "Limited": {
+          "precision": 0.24242424242424243,
+          "recall": 0.25806451612903225,
+          "f1-score": 0.25,
+          "support": 31.0
+        },
+        "accuracy": 0.37,
+        "macro avg": {
+          "precision": 0.3642608884544369,
+          "recall": 0.38193987272328284,
+          "f1-score": 0.36307189542483664,
+          "support": 100.0
+        },
+        "weighted avg": {
+          "precision": 0.3982787552948843,
+          "recall": 0.37,
+          "f1-score": 0.37499019607843137,
+          "support": 100.0
+        }
+      }
+    }
+  },
+  "wait_time_regression": {
+    "best_model": "random_forest",
+    "comparison": [
+      {
+        "model": "linear_regression",
+        "mae": 10.8569,
+        "mse": 218.2386,
+        "rmse": 14.7729,
+        "r2": -0.3048
+      },
+      {
+        "model": "decision_tree",
+        "mae": 12.38,
+        "mse": 388.92,
+        "rmse": 19.7211,
+        "r2": -1.3252
+      },
+      {
+        "model": "random_forest",
+        "mae": 9.8319,
+        "mse": 187.0119,
+        "rmse": 13.6752,
+        "r2": -0.1181
+      }
+    ],
+    "metrics": {
+      "model": "random_forest",
+      "mae": 9.8319,
+      "mse": 187.0119,
+      "rmse": 13.6752,
+      "r2": -0.1181
+    }
+  },
+  "price_regression": {
+    "best_model": "linear_regression",
+    "comparison": [
+      {
+        "model": "linear_regression",
+        "mae": 619.5534,
+        "mse": 936873.7945,
+        "rmse": 967.9224,
+        "r2": 0.861
+      },
+      {
+        "model": "decision_tree",
+        "mae": 963.9,
+        "mse": 2790661.0,
+        "rmse": 1670.5272,
+        "r2": 0.5859
+      },
+      {
+        "model": "random_forest",
+        "mae": 653.9323,
+        "mse": 1206431.0445,
+        "rmse": 1098.3765,
+        "r2": 0.821
+      }
+    ],
+    "metrics": {
+      "model": "linear_regression",
+      "mae": 619.5534,
+      "mse": 936873.7945,
+      "rmse": 967.9224,
+      "r2": 0.861
+    }
+  }
+}

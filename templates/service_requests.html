@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Service Request History & Status | Thunderbird 350X Smart Garage{% endblock %}
+
+{% block content %}
+<div class="card-header" style="border: none; padding-bottom: 0;">
+  <div>
+    <h1 class="page-title">Service Requests &amp; Repair Status Tracking</h1>
+    <p class="page-subtitle">Track live status updates, garage workshop notes, and parts fitting timeline.</p>
+  </div>
+  <a href="{{ url_for('new_service_request_view') }}" class="btn btn-primary btn-sm">+ New Request</a>
+</div>
+
+<div class="card">
+  {% if requests %}
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Request ID</th>
+            <th>Part Required</th>
+            <th>Assigned Garage</th>
+            <th>Issue Details</th>
+            <th>City</th>
+            <th>Priority</th>
+            <th>Est. Cost</th>
+            <th>Current Status</th>
+            <th>Date Created</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for req in requests %}
+            <tr>
+              <td><strong style="color: var(--re-red);">{{ req.request_id }}</strong></td>
+              <td>
+                <strong>{{ req.part_name }}</strong><br>
+                <small style="color: #64748b;">{{ req.part_category or 'General' }}</small>
+              </td>
+              <td>{{ req.garage_name or 'Unassigned' }}</td>
+              <td style="max-width: 240px; font-size: 0.84rem; color: #475569;">
+                {{ req.issue_description or 'No extra notes provided' }}
+              </td>
+              <td>{{ req.city }}</td>
+              <td>
+                <span class="badge" style="background-color: {% if req.priority == 'Critical' %}#fee2e2; color: #991b1b;{% elif req.priority == 'High' %}#ffedd5; color: #9a3412;{% else %}#f1f5f9; color: #334155;{% endif %}">
+                  {{ req.priority }}
+                </span>
+              </td>
+              <td>₹{{ "%.0f"|format(req.estimated_price) }}</td>
+              <td>
+                <span class="badge badge-{{ req.status|lower|replace(' ', '-') }}">
+                  {{ req.status }}
+                </span>
+              </td>
+              <td style="font-size: 0.8rem; color: #64748b;">{{ req.created_at[:10] }}</td>
+            </tr>
+            {% if req.garage_notes %}
+              <tr style="background-color: #fafbfc;">
+                <td colspan="9" style="font-size: 0.84rem; padding: 6px 14px; color: #0f172a; border-bottom: 2px solid #e2e8f0;">
+                  <strong style="color: #047857;">Mechanic Note:</strong> {{ req.garage_notes }}
+                </td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div style="text-align: center; padding: 36px 16px; color: #64748b;">
+      <p style="font-size: 1.05rem; margin-bottom: 12px;">No service requests logged for your account yet.</p>
+      <a href="{{ url_for('new_service_request_view') }}" class="btn btn-primary btn-sm">Create Service Request</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

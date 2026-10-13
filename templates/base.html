@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Smart Garage & Spare Parts System | Thunderbird 350X{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <!-- Academic Disclaimer Banner -->
+  <div class="academic-notice-banner">
+    <strong>Academic Project Notice:</strong> Built for Royal Enfield Thunderbird 350X research. Predictions &amp; stock metrics use synthetic educational data, not live manufacturer inventory.
+  </div>
+
+  <!-- Header Navigation -->
+  <header class="site-header">
+    <div class="nav-container">
+      <a href="{{ url_for('index') }}" class="brand-logo">
+        <span class="brand-badge">RE 350X</span>
+        <div>
+          <span class="brand-title">Smart Garage</span>
+          <span class="brand-subtitle">Thunderbird 350X Assistance</span>
+        </div>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="{{ url_for('index') }}" class="{% if request.path == '/' %}active{% endif %}">Home</a></li>
+          <li><a href="{{ url_for('search_parts_view') }}" class="{% if '/parts' in request.path %}active{% endif %}">Spare Parts</a></li>
+          <li><a href="{{ url_for('predict_view') }}" class="{% if '/predict' in request.path %}active{% endif %}">AI Predictor</a></li>
+          <li><a href="{{ url_for('recommendations_view') }}" class="{% if '/recommendations' in request.path %}active{% endif %}">Garages</a></li>
+          <li><a href="{{ url_for('ml_metrics_view') }}" class="{% if '/ml-metrics' in request.path %}active{% endif %}">ML Evaluation</a></li>
+
+          {% if session.get('user_id') %}
+            {% if session.get('role') == 'garage' %}
+              <li><a href="{{ url_for('garage_dashboard') }}" class="{% if '/garage' in request.path %}active{% endif %}">Garage Portal</a></li>
+            {% else %}
+              <li><a href="{{ url_for('user_dashboard') }}" class="{% if '/dashboard' in request.path %}active{% endif %}">My Dashboard</a></li>
+              <li><a href="{{ url_for('service_requests_view') }}" class="{% if '/service-requests' in request.path %}active{% endif %}">My Requests</a></li>
+            {% endif %}
+            <li>
+              <span class="nav-user-badge">
+                {{ session.get('full_name') }} ({{ session.get('role')|capitalize }})
+              </span>
+            </li>
+            <li><a href="{{ url_for('logout') }}" class="btn btn-outline-red btn-sm">Logout</a></li>
+          {% else %}
+            <li><a href="{{ url_for('login_select') }}" class="btn btn-primary btn-sm">Sign In / Register</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Flash Notification Messages -->
+  <main class="site-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-container">
+          {% for category, message in messages %}
+            <div class="flash-alert flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div>
+        <strong>Royal Enfield Thunderbird 350X Smart Garage System</strong> &copy; 2026<br>
+        <small>College Engineering Demonstration &bull; AI &amp; Data Science Prototype</small>
+      </div>
+      <div>
+        <a href="{{ url_for('ml_metrics_view') }}">Model Metrics</a> &bull;
+        <a href="{{ url_for('health_check') }}">API Health</a> &bull;
+        <a href="{{ url_for('login_select') }}">Portal Login</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}User Login | Thunderbird 350X Smart Garage{% endblock %}
+
+{% block content %}
+<div style="max-width: 440px; margin: 30px auto;">
+  <div class="card" style="border-top: 4px solid var(--re-red);">
+    <div style="text-align: center; margin-bottom: 20px;">
+      <span style="font-size: 2rem;">&#127949;</span>
+      <h2 style="font-size: 1.4rem; color: var(--bg-dark); margin-top: 8px;">User Login</h2>
+      <p style="font-size: 0.88rem; color: var(--text-muted);">Access your Thunderbird 350X maintenance portal</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('login_user') }}">
+      <div class="form-group">
+        <label class="form-label" for="username">Username or Email</label>
+        <input type="text" id="username" name="username" class="form-control" placeholder="Enter username or email" value="user_demo" required autofocus>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" value="password123" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Sign In as User</button>
+    </form>
+
+    <div style="background-color: #f8fafc; border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); padding: 12px; margin-top: 20px; font-size: 0.82rem; color: #475569;">
+      <strong>Demo Credentials (Examiner Quick Test):</strong><br>
+      Username: <code>user_demo</code> &bull; Password: <code>password123</code>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; margin-top: 18px; font-size: 0.85rem;">
+      <a href="{{ url_for('login_garage') }}" style="color: var(--text-muted);">Switch to Garage Login</a>
+      <a href="{{ url_for('register') }}" style="color: var(--re-red); font-weight: 600;">Create Account</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

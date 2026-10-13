@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Royal Enfield Thunderbird 350X Smart Garage{% endblock %}
+
+{% block content %}
+<div class="card" style="border-top: 4px solid var(--re-red); background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);">
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+    <div style="max-width: 680px;">
+      <span class="badge badge-limited" style="margin-bottom: 12px; font-size: 0.82rem;">Discontinued Model Maintenance System</span>
+      <h1 class="page-title" style="font-size: 2.1rem; line-height: 1.2;">Smart Garage &amp; Spare Parts Assistance System</h1>
+      <p style="font-size: 1.05rem; color: #475569; margin: 12px 0 20px 0;">
+        Specialized AI platform for Royal Enfield Thunderbird 350X riders, service centers, and spare-part distributors. Predict availability, forecast wait times, estimate replacement prices, and track garage service requests.
+      </p>
+
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <a href="{{ url_for('search_parts_view') }}" class="btn btn-primary">Search Spare Parts Catalog</a>
+        <a href="{{ url_for('predict_view') }}" class="btn btn-secondary">AI Prediction Engine</a>
+        {% if not session.get('user_id') %}
+          <a href="{{ url_for('login_select') }}" class="btn btn-outline-red">Sign In / Register</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div style="background-color: var(--bg-dark); color: #fff; padding: 22px; border-radius: var(--radius-md); max-width: 380px; width: 100%;">
+      <div style="font-size: 0.85rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">Quick Portal Access</div>
+      <h3 style="color: #fff; margin-bottom: 16px; font-size: 1.2rem;">Choose Your Role</h3>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <a href="{{ url_for('login_user') }}" class="btn btn-primary" style="width: 100%;">Motorcycle Owner Login</a>
+        <a href="{{ url_for('login_garage') }}" class="btn btn-secondary" style="width: 100%;">Service Garage Login</a>
+      </div>
+      <div style="margin-top: 14px; font-size: 0.8rem; color: #94a3b8; text-align: center;">
+        Demo accounts configured &bull; Instant evaluation access
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Project Key Metrics -->
+<div class="grid-4" style="margin-bottom: 24px;">
+  <div class="stat-widget">
+    <div class="stat-value">500</div>
+    <div class="stat-label">Cataloged RE Spares</div>
+  </div>
+  <div class="stat-widget green">
+    <div class="stat-value">3</div>
+    <div class="stat-label">Trained ML Models</div>
+  </div>
+  <div class="stat-widget amber">
+    <div class="stat-value">7</div>
+    <div class="stat-label">Specialist Garages</div>
+  </div>
+  <div class="stat-widget blue">
+    <div class="stat-value">10</div>
+    <div class="stat-label">Cities Covered</div>
+  </div>
+</div>
+
+<!-- Feature Breakdown -->
+<div class="grid-3">
+  <div class="card">
+    <div class="card-header">
+      <h3>1. Part Availability AI</h3>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 16px;">
+      Multiclass classification pipeline predicting whether rare Thunderbird 350X parts are Available, Limited, or Discontinued based on supplier type, city, and manufacturing year.
+    </p>
+    <a href="{{ url_for('predict_view') }}" class="btn btn-outline btn-sm">Try Classifier &rarr;</a>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>2. Price &amp; Wait Regression</h3>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 16px;">
+      Estimates realistic market replacement costs (INR) and transit waiting days for hard-to-source cruiser parts to assist with maintenance budget planning.
+    </p>
+    <a href="{{ url_for('predict_view') }}" class="btn btn-outline btn-sm">Test Regression &rarr;</a>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>3. Transparent Garage Ranking</h3>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 16px;">
+      Explainable multi-factor scoring model that matches riders to Royal Enfield specialist garages based on stock readiness, proximity, ratings, and turnaround time.
+    </p>
+    <a href="{{ url_for('recommendations_view') }}" class="btn btn-outline btn-sm">View Garages &rarr;</a>
+  </div>
+</div>
+
+<!-- Quick Parts Search Box -->
+<div class="card">
+  <div class="card-header">
+    <h2>Search Spare Parts Inventory</h2>
+    <a href="{{ url_for('search_parts_view') }}" class="btn btn-outline btn-sm">Full Catalog</a>
+  </div>
+  <form action="{{ url_for('search_parts_view') }}" method="GET" style="display: flex; gap: 12px; flex-wrap: wrap;">
+    <input type="text" name="part_name" class="form-control" placeholder="Search part (e.g. Clutch Cable, Brake Pads, Fuel Pump)..." style="flex: 2; min-width: 240px;">
+    <select name="category" class="form-control" style="flex: 1; min-width: 160px;">
+      <option value="">All Categories</option>
+      <option value="Control">Control</option>
+      <option value="Braking">Braking</option>
+      <option value="Engine/Clutch">Engine/Clutch</option>
+      <option value="Electrical">Electrical</option>
+      <option value="Suspension">Suspension</option>
+      <option value="Transmission">Transmission</option>
+    </select>
+    <select name="city" class="form-control" style="flex: 1; min-width: 140px;">
+      <option value="">All Cities</option>
+      <option value="Pune">Pune</option>
+      <option value="Mumbai">Mumbai</option>
+      <option value="Nashik">Nashik</option>
+      <option value="Kolhapur">Kolhapur</option>
+      <option value="Aurangabad">Aurangabad</option>
+    </select>
+    <button type="submit" class="btn btn-primary" style="flex: 0 0 auto;">Filter Catalog</button>
+  </form>
+</div>
+{% endblock %}

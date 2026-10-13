@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Book Service Request | Thunderbird 350X Smart Garage{% endblock %}
+
+{% block content %}
+<div style="max-width: 680px; margin: 20px auto;">
+  <div class="card" style="border-top: 4px solid var(--re-red);">
+    <div class="card-header">
+      <h2>Submit Royal Enfield Service Request</h2>
+      <a href="{{ url_for('user_dashboard') }}" class="btn btn-outline btn-sm">&larr; Back to Dashboard</a>
+    </div>
+
+    <form method="POST" action="{{ url_for('new_service_request_view') }}">
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label" for="user_name">Customer Name</label>
+          <input type="text" id="user_name" name="user_name" class="form-control" value="{{ user.full_name }}" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="user_phone">Contact Phone</label>
+          <input type="tel" id="user_phone" name="user_phone" class="form-control" value="{{ user.phone }}" required>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label" for="bike_model">Motorcycle Model</label>
+          <input type="text" id="bike_model" name="bike_model" class="form-control" value="Royal Enfield Thunderbird 350X" readonly style="background-color: #f1f5f9;">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="city">Service City</label>
+          <select id="city" name="city" class="form-control" required>
+            <option value="Pune" {% if user.city == 'Pune' or request.args.get('city') == 'Pune' %}selected{% endif %}>Pune</option>
+            <option value="Mumbai" {% if user.city == 'Mumbai' or request.args.get('city') == 'Mumbai' %}selected{% endif %}>Mumbai</option>
+            <option value="Nashik" {% if user.city == 'Nashik' or request.args.get('city') == 'Nashik' %}selected{% endif %}>Nashik</option>
+            <option value="Kolhapur" {% if user.city == 'Kolhapur' or request.args.get('city') == 'Kolhapur' %}selected{% endif %}>Kolhapur</option>
+            <option value="Aurangabad" {% if user.city == 'Aurangabad' or request.args.get('city') == 'Aurangabad' %}selected{% endif %}>Aurangabad</option>
+            <option value="Satara" {% if user.city == 'Satara' or request.args.get('city') == 'Satara' %}selected{% endif %}>Satara</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label" for="part_name">Part Required</label>
+          <input type="text" id="part_name" name="part_name" class="form-control" placeholder="e.g. Clutch Cable, Front Brake Pads" value="{{ request.args.get('part_name', '') }}" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="part_category">Category</label>
+          <select id="part_category" name="part_category" class="form-control">
+            <option value="General">General</option>
+            <option value="Engine/Clutch" {% if request.args.get('part_category') == 'Engine/Clutch' %}selected{% endif %}>Engine/Clutch</option>
+            <option value="Control" {% if request.args.get('part_category') == 'Control' %}selected{% endif %}>Control</option>
+            <option value="Braking" {% if request.args.get('part_category') == 'Braking' %}selected{% endif %}>Braking</option>
+            <option value="Electrical" {% if request.args.get('part_category') == 'Electrical' %}selected{% endif %}>Electrical</option>
+            <option value="Suspension" {% if request.args.get('part_category') == 'Suspension' %}selected{% endif %}>Suspension</option>
+            <option value="Transmission" {% if request.args.get('part_category') == 'Transmission' %}selected{% endif %}>Transmission</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="form-group">
+          <label class="form-label" for="garage_id">Assigned Garage</label>
+          <select id="garage_id" name="garage_id" class="form-control">
+            <option value="">Auto-Assign Top Rated Nearby</option>
+            {% for g in garages %}
+              <option value="{{ g.id }}" {% if request.args.get('garage_id')|string == g.id|string %}selected{% endif %}>
+                {{ g.garage_name }} ({{ g.city }})
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="priority">Priority</label>
+          <select id="priority" name="priority" class="form-control" required>
+            <option value="Low">Low (Routine)</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="High">High (Urgent Fitting)</option>
+            <option value="Critical">Critical (Breakdown)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="estimated_price">Est. Price (₹)</label>
+          <input type="number" id="estimated_price" name="estimated_price" class="form-control" value="{{ request.args.get('est_price', 0) }}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="issue_description">Issue Description &amp; Fitting Symptoms</label>
+        <textarea id="issue_description" name="issue_description" class="form-control" rows="3" placeholder="Describe symptoms (e.g. clutch slippage during acceleration, unusual vibrations at 70 km/h, brake squeal)..."></textarea>
+      </div>
+
+      <input type="hidden" name="estimated_wait_days" value="{{ request.args.get('wait_days', 0) }}">
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+        Submit Service Order &amp; Generate Tracking ID
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

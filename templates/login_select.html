@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Select Portal | Thunderbird 350X Smart Garage{% endblock %}
+
+{% block content %}
+<div class="login-selection-container">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h1 class="page-title">Sign In to Thunderbird 350X Smart Garage</h1>
+    <p class="page-subtitle">Please select your account type to continue to the appropriate maintenance portal.</p>
+  </div>
+
+  <div class="grid-2">
+    <!-- User Login Card -->
+    <a href="{{ url_for('login_user') }}" style="text-decoration: none; color: inherit;">
+      <div class="login-choice-card">
+        <span class="login-choice-icon">&#127949;</span>
+        <h2>USER LOGIN</h2>
+        <p>For Royal Enfield Thunderbird 350X owners looking to search spare parts, estimate costs, predict transit delays, and track repair orders.</p>
+        <span class="btn btn-primary" style="width: 100%;">Continue as Motorcycle Owner &rarr;</span>
+        <div style="margin-top: 14px; font-size: 0.8rem; color: #64748b;">
+          Demo: <strong>user_demo</strong> / <strong>password123</strong>
+        </div>
+      </div>
+    </a>
+
+    <!-- Garage Login Card -->
+    <a href="{{ url_for('login_garage') }}" style="text-decoration: none; color: inherit;">
+      <div class="login-choice-card">
+        <span class="login-choice-icon">&#128295;</span>
+        <h2>GARAGE LOGIN</h2>
+        <p>For Royal Enfield service centers, mechanics, and authorized workshops to review incoming customer requests, accept jobs, and update repair progress.</p>
+        <span class="btn btn-secondary" style="width: 100%;">Continue as Service Garage &rarr;</span>
+        <div style="margin-top: 14px; font-size: 0.8rem; color: #64748b;">
+          Demo: <strong>garage_demo</strong> / <strong>garage123</strong>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <div style="text-align: center; margin-top: 30px; font-size: 0.9rem; color: var(--text-muted);">
+    Don't have an account yet? <a href="{{ url_for('register') }}" style="color: var(--re-red); font-weight: 600;">Register as a new user</a>
+  </div>
+</div>
+{% endblock %}

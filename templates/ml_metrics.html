@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}Machine Learning Model Evaluation | Thunderbird 350X Smart Garage{% endblock %}
+
+{% block content %}
+<div class="card-header" style="border: none; padding-bottom: 0;">
+  <div>
+    <h1 class="page-title">Machine Learning Pipeline Evaluation &amp; Benchmarks</h1>
+    <p class="page-subtitle">Real evaluation metrics from <code>ML/models/metrics.json</code> for viva and examiner assessment.</p>
+  </div>
+</div>
+
+<!-- Overview Card -->
+<div class="card" style="border-top: 4px solid var(--re-red);">
+  <div class="card-header">
+    <h3>Dataset &amp; Methodology Specification</h3>
+  </div>
+  <div class="grid-3" style="font-size: 0.9rem; color: #334155;">
+    <div>
+      <strong>Dataset Source:</strong><br>
+      <code style="font-size: 0.8rem;">Dataset/royal_enfield_thunderbird_350x_parts_dataset.csv</code>
+    </div>
+    <div>
+      <strong>Sample Count &amp; Split:</strong><br>
+      500 records &bull; 80% Train (400) / 20% Test (100) stratified
+    </div>
+    <div>
+      <strong>Preprocessing Architecture:</strong><br>
+      ColumnTransformer + SimpleImputer + OneHotEncoder (Pipelines)
+    </div>
+  </div>
+  <div style="background-color: #fffbeb; border: 1px solid #fde68a; border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 14px; font-size: 0.82rem; color: #92400e;">
+    <strong>Synthetic Data Disclosure:</strong> All metrics represent empirical evaluations on the project's academic synthetic dataset for Royal Enfield Thunderbird 350X spares.
+  </div>
+</div>
+
+<!-- Availability Classification Section -->
+<div class="card">
+  <div class="card-header">
+    <h3>1. Spare-Part Availability Classification (3-Class)</h3>
+    <span class="badge" style="background-color: #ecfdf5; color: #065f46;">
+      Selected: {{ metrics.classification.best_model|upper }}
+    </span>
+  </div>
+  <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px;">
+    Target labels: <code>Available</code>, <code>Limited</code>, <code>Discontinued</code>. Model selection based on Weighted F1 followed by Accuracy.
+  </p>
+
+  <div class="table-responsive" style="margin-bottom: 18px;">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Algorithm Tested</th>
+          <th>Accuracy</th>
+          <th>Weighted Precision</th>
+          <th>Weighted Recall</th>
+          <th>Weighted F1-Score</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for comp in metrics.classification.comparison %}
+          <tr {% if comp.model == metrics.classification.best_model %}style="background-color: #f0fdf4;"{% endif %}>
+            <td><strong>{{ comp.model|replace('_', ' ')|title }}</strong></td>
+            <td>{{ (comp.accuracy * 100)|round(2) }}%</td>
+            <td>{{ (comp.precision_weighted * 100)|round(2) }}%</td>
+            <td>{{ (comp.recall_weighted * 100)|round(2) }}%</td>
+            <td><strong>{{ (comp.f1_weighted * 100)|round(2) }}%</strong></td>
+            <td>
+              {% if comp.model == metrics.classification.best_model %}
+                <span class="badge" style="background-color: #bbf7d0; color: #166534;">Best Selected</span>
+              {% else %}
+                <span class="badge" style="background-color: #e2e8f0; color: #475569;">Evaluated</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if metrics.classification.metrics.confusion_matrix %}
+    <h4 style="font-size: 0.95rem; margin-bottom: 8px;">Confusion Matrix (Selected Model):</h4>
+    <div style="background-color: #f8fafc; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: inline-block;">
+      <pre style="margin: 0; font-family: monospace; font-size: 0.85rem; color: #1e293b;">
+Labels: [Available, Discontinued, Limited]
+Matrix: {{ metrics.classification.metrics.confusion_matrix }}
+      </pre>
+    </div>
+  {% endif %}
+</div>
+
+<!-- Regression Models Section (Wait & Price) -->
+<div class="grid-2">
+  <!-- Wait Time Regression -->
+  <div class="card">
+    <div class="card-header">
+      <h3>2. Waiting Time (Days)</h3>
+      <span class="badge" style="background-color: #ecfdf5; color: #065f46;">
+        Selected: {{ metrics.wait_time_regression.best_model|upper }}
+      </span>
+    </div>
+
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Algorithm</th>
+            <th>MAE</th>
+            <th>RMSE</th>
+            <th>R² Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for comp in metrics.wait_time_regression.comparison %}
+            <tr {% if comp.model == metrics.wait_time_regression.best_model %}style="background-color: #f0fdf4;"{% endif %}>
+              <td><strong>{{ comp.model|replace('_', ' ')|title }}</strong></td>
+              <td>{{ comp.mae|round(2) }} d</td>
+              <td>{{ comp.rmse|round(2) }} d</td>
+              <td>{{ comp.r2|round(4) }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Price Regression -->
+  <div class="card">
+    <div class="card-header">
+      <h3>3. Replacement Price (INR)</h3>
+      <span class="badge" style="background-color: #ecfdf5; color: #065f46;">
+        Selected: {{ metrics.price_regression.best_model|upper }}
+      </span>
+    </div>
+
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Algorithm</th>
+            <th>MAE</th>
+            <th>RMSE</th>
+            <th>R² Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for comp in metrics.price_regression.comparison %}
+            <tr {% if comp.model == metrics.price_regression.best_model %}style="background-color: #f0fdf4;"{% endif %}>
+              <td><strong>{{ comp.model|replace('_', ' ')|title }}</strong></td>
+              <td>₹{{ comp.mae|round(1) }}</td>
+              <td>₹{{ comp.rmse|round(1) }}</td>
+              <td><strong>{{ comp.r2|round(4) }}</strong></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

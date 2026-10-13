@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Register Account | Thunderbird 350X Smart Garage{% endblock %}
+
+{% block content %}
+<div style="max-width: 520px; margin: 30px auto;">
+  <div class="card" style="border-top: 4px solid var(--re-red);">
+    <div style="text-align: center; margin-bottom: 20px;">
+      <h2 style="font-size: 1.4rem; color: var(--bg-dark);">Create New Account</h2>
+      <p style="font-size: 0.88rem; color: var(--text-muted);">Register as a Thunderbird 350X rider or service garage</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('register') }}">
+      <div class="form-group">
+        <label class="form-label" for="role">Register As</label>
+        <select id="role" name="role" class="form-control" required>
+          <option value="user" selected>Motorcycle Owner / User</option>
+          <option value="garage">Service Garage / Workshop</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="full_name">Full Name / Garage Name</label>
+        <input type="text" id="full_name" name="full_name" class="form-control" placeholder="e.g. Vikram Sharma or Deccan Bullet Care" required>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label" for="username">Username</label>
+          <input type="text" id="username" name="username" class="form-control" placeholder="e.g. vikram_re" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="city">City</label>
+          <select id="city" name="city" class="form-control" required>
+            <option value="Pune" selected>Pune</option>
+            <option value="Mumbai">Mumbai</option>
+            <option value="Nashik">Nashik</option>
+            <option value="Kolhapur">Kolhapur</option>
+            <option value="Aurangabad">Aurangabad</option>
+            <option value="Satara">Satara</option>
+            <option value="Solapur">Solapur</option>
+            <option value="Ahmednagar">Ahmednagar</option>
+            <option value="Sangli">Sangli</option>
+            <option value="Baramati">Baramati</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input type="email" id="email" name="email" class="form-control" placeholder="rider@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" class="form-control" placeholder="+91 98765 00000" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password (minimum 6 characters)</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Enter secure password" minlength="6" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Complete Registration</button>
+    </form>
+
+    <div style="text-align: center; margin-top: 18px; font-size: 0.85rem;">
+      Already have an account? <a href="{{ url_for('login_select') }}" style="color: var(--re-red); font-weight: 600;">Sign in here</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
